@@ -1,0 +1,28 @@
+name: Verify TradingAgents compatibility
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/verify.yml'
+      - 'verify_upstream.py'
+      - 'setup.sh'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install upstream and verify imports
+        run: bash setup.sh
+      - name: Upload API report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: upstream-api-report
+          path: results/upstream_api.json
+          if-no-files-found: warn
