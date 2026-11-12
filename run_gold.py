@@ -9,9 +9,9 @@ def main():
     p.add_argument("--start", default="2026-01-01")
     p.add_argument("--end", default="2026-01-31")
     p.add_argument("--every", type=int, default=7)
-    p.add_argument("--provider", default="openai")
-    p.add_argument("--quick-model")
-    p.add_argument("--deep-model")
+    p.add_argument("--provider", default="openrouter")
+    p.add_argument("--quick-model", default="openrouter/free")
+    p.add_argument("--deep-model", default="openrouter/free")
     p.add_argument("--confirm-historical-data", action="store_true")
     a = p.parse_args()
     if not a.confirm_historical_data:
@@ -27,6 +27,10 @@ def main():
         config["quick_think_llm"] = a.quick_model
     if a.deep_model:
         config["deep_think_llm"] = a.deep_model
+    if a.provider == "openrouter":
+        import os
+        if not os.getenv("OPENROUTER_API_KEY"):
+            p.error("OPENROUTER_API_KEY is missing. Configure it as a Codespaces secret.")
     graph = TradingAgentsGraph(["market", "news"], config=config, debug=False)
     pathlib.Path("results").mkdir(exist_ok=True)
     with open("results/gold_decisions.csv", "w", newline="", encoding="utf-8") as f:
