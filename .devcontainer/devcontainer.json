@@ -1,0 +1,1 @@
+{"name":"TradingAgents Gold Research","image":"mcr.microsoft.com/devcontainers/python:3.11","postCreateCommand":"bash setup.sh"}
