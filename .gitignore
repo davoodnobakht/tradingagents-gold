@@ -1,0 +1,6 @@
+upstream/
+results/
+.env
+.env.*
+__pycache__/
+*.pyc
